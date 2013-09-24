@@ -4,10 +4,10 @@ Leaflet.AlmostOver
 This plugin allows to detect mouse click and overing events on lines,
 with a tolerance distance.
 
-It is useful if you paths are drawn with a very small weight, or for clicks
-on mobile devices, for which finger precision can be a problem.
+It is useful if paths are drawn with a very small weight, or for clicks
+detection on mobile devices, for which finger precision can be a problem.
 
-Play with [online demo](http://makinacorpus.github.io/Leaflet.PathGrab/).
+Play with [online demo](http://makinacorpus.github.io/Leaflet.AlmostOver/).
 
 It requires [Leaflet.GeometryUtil](https://github.com/makinacorpus/Leaflet.GeometryUtil/).
 
