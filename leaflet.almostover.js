@@ -56,11 +56,14 @@ L.Handler.AlmostOver = L.Handler.extend({
         }
     },
 
-    _onMouseMove: function (e) {
+    getClosest: function (latlng) {
         var snapfunc = L.GeometryUtil.closestLayerSnap,
-            distance = this.options.distance,
-            closest = snapfunc(this._map, this._layers, e.latlng, distance, false);
+            distance = this.options.distance;
+        return snapfunc(this._map, this._layers, latlng, distance, false);
+    },
 
+    _onMouseMove: function (e) {
+        var closest = this.getClosest(e.latlng);
         if (closest) {
             if (!this._previous) {
                 this._map.fire('almost:over', {layer: closest.layer,
@@ -78,8 +81,8 @@ L.Handler.AlmostOver = L.Handler.extend({
     },
 
     _onMouseClick: function (e) {
-        if (this._previous) {
-            var closest = this._previous;
+        var closest = this.getClosest(e.latlng);
+        if (closest) {
             this._map.fire('almost:' + e.type, {layer: closest.layer,
                                                 latlng: closest.latlng});
         }
