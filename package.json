@@ -1,26 +1,30 @@
 {
-    "name": "leaflet-almostover"
-  , "version": "0.0.1"
-  , "description": ""
-  , "keywords": ["Leaflet", "GIS"]
-  , "main": "leaflet.almostover.js"
-  , "bugs": {
-    "url": "https://github.com/makinacorpus/Leaflet.AlmostOver/issues"
-  }
-  , "repository": {
-    "type": "git",
-    "url": "git://github.com/makinacorpus/Leaflet.AlmostOver.git"
-  }
-  , "license": "MIT"
-  , "scripts": {
-  }
-  , "dependencies": {
-    "leaflet": "0.6.x",
-    "leaflet-geometryutil": "*"
-  }
-  , "devDependencies": {
-    "mocha": "1.9.x",
-    "chai": "1.6.x",
-    "mocha-phantomjs": "2.0.x"
-  }
+    "name": "leaflet-almostover",
+    "version": "0.0.1",
+    "description": "",
+    "keywords": [
+        "Leaflet",
+        "GIS"
+    ],
+    "main": "leaflet.almostover.js",
+    "bugs": {
+        "url": "https://github.com/makinacorpus/Leaflet.AlmostOver/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/makinacorpus/Leaflet.AlmostOver.git"
+    },
+    "license": "MIT",
+    "scripts": {
+        "test": "make test"
+    },
+    "dependencies": {
+        "leaflet": "0.6.x",
+        "leaflet-geometryutil": "*"
+    },
+    "devDependencies": {
+        "mocha": "1.9.x",
+        "chai": "1.6.x",
+        "mocha-phantomjs": "2.0.x"
+    }
 }
