@@ -49,7 +49,7 @@ describe('L.Handler.AlmostOver', function() {
 
 
         it("should not trigger mousesample if no layer added", function(done) {
-            callback = sinon.spy();
+            var callback = sinon.spy();
             map.on('mousemovesample', callback);
             map.fire('mousemove');
             assert.isFalse(callback.called);
@@ -58,7 +58,7 @@ describe('L.Handler.AlmostOver', function() {
 
         it("should trigger mousesample once a layer is added", function(done) {
             map.almostOver.addLayer(L.marker([1, 1]));
-            callback = sinon.spy();
+            var callback = sinon.spy();
             map.on('mousemovesample', callback);
 
             clock.tick(period+1);
@@ -70,7 +70,7 @@ describe('L.Handler.AlmostOver', function() {
 
         it("should filter events with high frequency", function(done) {
             map.almostOver.addLayer(L.marker([1, 1]));
-            callback = sinon.spy();
+            var callback = sinon.spy();
             map.on('mousemovesample', callback);
 
             clock.tick(period+1);
@@ -86,7 +86,7 @@ describe('L.Handler.AlmostOver', function() {
 
         it("should trigger mousesample only for defined period", function(done) {
             map.almostOver.addLayer(L.marker([1, 1]));
-            callback = sinon.spy();
+            var callback = sinon.spy();
             map.on('mousemovesample', callback);
 
             clock.tick(period+1);
@@ -103,5 +103,78 @@ describe('L.Handler.AlmostOver', function() {
             done();
         });
 
+    });
+
+
+    describe('Almost over events', function() {
+        var map;
+
+        beforeEach(function() {
+            map = L.map('map').fitWorld();
+            var line = L.polyline([[0, 0], [0, 10]]).addTo(map);
+            map.almostOver.addLayer(line);
+        });
+
+        afterEach(function() {
+            map.remove();
+        });
+
+        it("should not trigger almost:over if too far", function(done) {
+            var callback = sinon.spy();
+            map.on('almost:over', callback);
+            map.fire('mousemovesample', {latlng: [34, 0]});
+            assert.isFalse(callback.called);
+            done();
+        });
+
+        it("should trigger almost:over if close enough", function(done) {
+            var callback = sinon.spy();
+            map.on('almost:over', callback);
+            map.fire('mousemovesample', {latlng: [33, 0]});
+            assert.isTrue(callback.called);
+            done();
+        });
+
+        it("should trigger almost clicks if close enough", function(done) {
+            var click = sinon.spy(),
+                dblclick = sinon.spy();
+            map.on('almost:click', click);
+            map.on('almost:dblclick', dblclick);
+            map.fire('click', {latlng: [10, 0]});
+            map.fire('dblclick', {latlng: [10, 0], containerPoint: [0, 0]});
+            assert.isTrue(click.called);
+            assert.isTrue(dblclick.called);
+            done();
+        });
+
+        it("should trigger almost:over once, and many almost:move", function(done) {
+            var over = sinon.spy(),
+                move = sinon.spy(),
+                out = sinon.spy();
+            map.on('almost:over', over);
+            map.on('almost:move', move);
+            map.on('almost:out', out);
+            map.fire('mousemovesample', {latlng: [10, 0]});
+            map.fire('mousemovesample', {latlng: [10.1, 0]});
+            map.fire('mousemovesample', {latlng: [10.1, 0]});
+            map.fire('mousemovesample', {latlng: [10.3, 0]});
+            map.fire('mousemovesample', {latlng: [50, 0]});
+            assert.isTrue(over.calledOnce);
+            assert.equal(4, move.callCount);
+            assert.isTrue(out.calledOnce);
+            done();
+        });
+
+        it("should not trigger almost:out if no almost:move", function(done) {
+            var out = sinon.spy();
+            map.on('almost:out', out);
+            map.fire('mousemovesample', {latlng: [50, 0]});
+            assert.isFalse(out.calledOnce);
+
+            map.fire('mousemovesample', {latlng: [10, 0]});
+            map.fire('mousemovesample', {latlng: [50, 0]});
+            assert.isTrue(out.calledOnce);
+            done();
+        });
     });
 });
