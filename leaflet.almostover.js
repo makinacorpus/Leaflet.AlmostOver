@@ -17,6 +17,7 @@ L.Handler.AlmostOver = L.Handler.extend({
         this._layers = [];
         this._previous = null;
         this._marker = null;
+        this._buffer = 0;
 
         // Reduce 'mousemove' event frequency
         this.__mouseMoveSampling = (function () {
@@ -37,6 +38,15 @@ L.Handler.AlmostOver = L.Handler.extend({
         this._map.on('mousemove', this.__mouseMoveSampling, this);
         this._map.on('mousemovesample', this._onMouseMove, this);
         this._map.on('click dblclick', this._onMouseClick, this);
+
+        var map = this._map;
+        function computeBuffer() {
+            this._buffer = this._map.layerPointToLatLng([0, 0]).lat -
+                           this._map.layerPointToLatLng([this.options.distance,
+                                                         this.options.distance]).lat;
+        }
+        this._map.on('viewreset zoomend', computeBuffer, this);
+        this._map.whenReady(computeBuffer, this);
     },
 
     removeHooks: function () {
@@ -52,6 +62,9 @@ L.Handler.AlmostOver = L.Handler.extend({
             }, this);
         }
         else {
+            if (typeof this.indexLayer == 'function') {
+                this.indexLayer(layer);
+            }
             this._layers.push(layer);
         }
     },
@@ -59,7 +72,15 @@ L.Handler.AlmostOver = L.Handler.extend({
     getClosest: function (latlng) {
         var snapfunc = L.GeometryUtil.closestLayerSnap,
             distance = this.options.distance;
-        return snapfunc(this._map, this._layers, latlng, distance, false);
+
+        var snaplist = [];
+        if (typeof this.searchBuffer == 'function') {
+            snaplist = this.searchBuffer(latlng, this._buffer);
+        }
+        else {
+            snaplist = this._layers;
+        }
+        return snapfunc(this._map, snaplist, latlng, distance, false);
     },
 
     _onMouseMove: function (e) {
@@ -88,5 +109,9 @@ L.Handler.AlmostOver = L.Handler.extend({
         }
     },
 });
+
+if (L.LayerIndexMixin !== undefined) {
+    L.Handler.AlmostOver.include(L.LayerIndexMixin);
+}
 
 L.Map.addInitHook('addHandler', 'almostOver', L.Handler.AlmostOver);
