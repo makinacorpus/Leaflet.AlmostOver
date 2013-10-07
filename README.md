@@ -12,7 +12,7 @@ Play with [online demo](http://makinacorpus.github.io/Leaflet.AlmostOver/).
 It requires [Leaflet.GeometryUtil](https://github.com/makinacorpus/Leaflet.GeometryUtil/).
 
 
-[![Build Status](https://travis-ci.org/makinacorpus/Leaflet.AlmostOver.png?branch=master)](https://travis-ci.org/makinacorpus/Leaflet.AlmostOver)
+[![Build Status](https://travis-ci.org/makinacorpus/Leaflet.AlmostOver.png)](https://travis-ci.org/makinacorpus/Leaflet.AlmostOver)
 
 
 Usage
