@@ -25,6 +25,7 @@
     "devDependencies": {
         "mocha": "1.9.x",
         "chai": "1.6.x",
+        "sinon": "1.7.x",
         "mocha-phantomjs": "2.0.x"
     }
 }

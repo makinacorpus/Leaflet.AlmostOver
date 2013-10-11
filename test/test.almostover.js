@@ -1,6 +1,5 @@
 var assert = chai.assert;
 
-
 describe('L.Handler.AlmostOver', function() {
 
     describe('Activation', function() {
