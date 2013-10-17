@@ -69,6 +69,21 @@ L.Handler.AlmostOver = L.Handler.extend({
         }
     },
 
+    removeLayer: function (layer) {
+        if (typeof layer.eachLayer == 'function') {
+            layer.eachLayer(function (l) {
+                this.removeLayer(l);
+            }, this);
+        }
+        else {
+            if (typeof this.unindexLayer == 'function') {
+                this.unindexLayer(layer);
+            }
+            var index = this._layers.indexOf(layer);
+            this._layers.splice(index, 1);
+        }
+    },
+
     getClosest: function (latlng) {
         var snapfunc = L.GeometryUtil.closestLayerSnap,
             distance = this.options.distance;
