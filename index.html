@@ -32,10 +32,24 @@
         margin: 0px;
         text-align: center;
     }
+    .help a.sources {
+        float: left;
+        margin-left: 50px;
+        color: white;
+    }
+    .help a.logo {
+        float: right;
+    }
+    .help a.logo img {
+        height: 30px;
+    }
   </style>
 </head>
 <body>
-  <p class="help">Move your mouse around, click approximatively !</p>
+  <p class="help">Move your mouse around, click approximatively !
+    <a class="sources" href="http://github.com/makinacorpus/Leaflet.AlmostOver/">Sources</a>
+    <a class="logo" href="http://makina-corpus.com"><img src="http://depot.makina-corpus.org/public/logo.gif"/></a>
+  </p>
   <div id="map"></div>
 
   <script type='text/javascript'>
