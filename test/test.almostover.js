@@ -175,5 +175,26 @@ describe('L.Handler.AlmostOver', function() {
             assert.isTrue(out.calledOnce);
             done();
         });
+
+        it("should trigger almost:out when jump from a layer to another", function(done) {
+            var otherline = L.polyline([[0, 0], [10, 0]]).addTo(map);
+            map.almostOver.addLayer(otherline);
+
+            var over = sinon.spy(),
+                out = sinon.spy();
+            map.on('almost:over', over);
+            map.on('almost:out', out);
+
+            map.fire('mousemovesample', {latlng: [0, 10]});
+            map.fire('mousemovesample', {latlng: [10, 0]});
+
+            assert.isTrue(out.calledOnce);
+            var outlayer = out.getCall(0).args[0].layer,
+                overlayer = over.getCall(1).args[0].layer;
+
+            assert.notEqual(outlayer, otherline);
+            assert.equal(overlayer, otherline);
+            done();
+        });
     });
 });

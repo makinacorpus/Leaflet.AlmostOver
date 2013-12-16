@@ -105,6 +105,12 @@ L.Handler.AlmostOver = L.Handler.extend({
                 this._map.fire('almost:over', {layer: closest.layer,
                                                latlng: closest.latlng});
             }
+            else if (L.stamp(this._previous.layer) != L.stamp(closest.layer)) {
+                this._map.fire('almost:out', {layer: this._previous.layer});
+                this._map.fire('almost:over', {layer: closest.layer,
+                                               latlng: closest.latlng});
+            }
+
             this._map.fire('almost:move', {layer: closest.layer,
                                            latlng: closest.latlng});
         }
