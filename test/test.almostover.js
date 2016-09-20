@@ -140,7 +140,7 @@ describe('L.Handler.AlmostOver', function() {
             map.on('almost:click', click);
             map.on('almost:dblclick', dblclick);
             map.fire('click', {latlng: [10, 0]});
-            map.fire('dblclick', {latlng: [10, 0], containerPoint: [0, 0]});
+            map.fire('dblclick', {latlng: [10, 0], containerPoint: [0, 0], originalEvent: { shiftKey: false } });
             assert.isTrue(click.called);
             assert.isTrue(dblclick.called);
             done();
