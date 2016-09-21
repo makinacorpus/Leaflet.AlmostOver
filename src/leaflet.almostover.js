@@ -55,6 +55,10 @@ L.Handler.AlmostOver = L.Handler.extend({
         this._map.off('click dblclick', this._onMouseClick, this);
     },
 
+    setOptions: function(options) {
+        this.options = L.extend(this.options, options);
+    },
+
     addLayer: function (layer) {
         if (typeof layer.eachLayer == 'function') {
             layer.eachLayer(function (l) {
