@@ -56,7 +56,7 @@ L.Handler.AlmostOver = L.Handler.extend({
     },
 
     setOptions: function(options) {
-        this.options = L.extend(this.options, options);
+        L.extend(this.options, options);
     },
 
     addLayer: function (layer) {
