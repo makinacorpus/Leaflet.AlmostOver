@@ -6,7 +6,7 @@
         "Leaflet",
         "GIS"
     ],
-    "main": "leaflet.almostover.js",
+    "main": "src/leaflet.almostover.js",
     "bugs": {
         "url": "https://github.com/makinacorpus/Leaflet.AlmostOver/issues"
     },
@@ -16,16 +16,16 @@
     },
     "license": "MIT",
     "scripts": {
-        "test": "make test"
+        "test": "mocha-phantomjs test/index.html"
     },
-    "dependencies": {
-        "leaflet": "0.6.x",
+    "peerDependencies": {
+        "leaflet": "0.7.x",
         "leaflet-geometryutil": "*"
     },
     "devDependencies": {
-        "mocha": "1.9.x",
-        "chai": "1.6.x",
-        "sinon": "1.7.x",
-        "mocha-phantomjs": "2.0.x"
+        "mocha": "3.0.x",
+        "chai": "3.5.x",
+        "sinon": "1.17.x",
+        "mocha-phantomjs": "4.1.x"
     }
 }
