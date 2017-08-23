@@ -5,7 +5,7 @@ L.Map.mergeOptions({
 
 L.Handler.AlmostOver = L.Handler.extend({
 
-    includes: L.Mixin.Events,
+    includes: L.Evented,
 
     options: {
         distance: 25,   // pixels
