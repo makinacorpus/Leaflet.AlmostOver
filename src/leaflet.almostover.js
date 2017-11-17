@@ -82,6 +82,7 @@ L.Handler.AlmostOver = L.Handler.extend({
             var index = this._layers.indexOf(layer);
             this._layers.splice(index, 1);
         }
+        this._previous = null;
     },
 
     getClosest: function (latlng) {
