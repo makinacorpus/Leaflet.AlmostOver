@@ -1,16 +1,23 @@
 L.Map.mergeOptions({
-    almostOver: true
+    // @option almostOver: Boolean = true
+    // Set it to false to disable this plugin
+    almostOver: true,
+    // @option almostDistance: Number = 25
+    // Tolerance in pixels
+    almostDistance: 25,   // pixels
+    // @option almostSamplingPeriod: Number = 50
+    // To reduce the 'mousemove' event frequency. In milliseconds
+    almostSamplingPeriod: 50,  // ms
+    // @option almostOnMouseMove Boolean = true
+    // Set it to false to disable track 'mousemove' events and improve performance
+    // if AlmostOver is only need for 'click' events.
+    almostOnMouseMove: true,
 });
 
 
 L.Handler.AlmostOver = L.Handler.extend({
 
     includes: L.Mixin.Events,
-
-    options: {
-        distance: 25,   // pixels
-        samplingPeriod: 50,  // ms
-    },
 
     initialize: function (map) {
         this._map = map;
@@ -24,7 +31,7 @@ L.Handler.AlmostOver = L.Handler.extend({
             var timer = new Date();
             return function (e) {
                 var date = new Date(),
-                    filtered = (date - timer) < this.options.samplingPeriod;
+                    filtered = (date - timer) < this._map.options.almostSamplingPeriod;
                 if (filtered || this._layers.length === 0) {
                     return;  // Ignore movement
                 }
@@ -35,15 +42,17 @@ L.Handler.AlmostOver = L.Handler.extend({
     },
 
     addHooks: function () {
-        this._map.on('mousemove', this.__mouseMoveSampling, this);
-        this._map.on('mousemovesample', this._onMouseMove, this);
+        if (this._map.options.almostOnMouseMove) {
+            this._map.on('mousemove', this.__mouseMoveSampling, this);
+            this._map.on('mousemovesample', this._onMouseMove, this);
+        }
         this._map.on('click dblclick', this._onMouseClick, this);
 
         var map = this._map;
         function computeBuffer() {
             this._buffer = this._map.layerPointToLatLng([0, 0]).lat -
-                           this._map.layerPointToLatLng([this.options.distance,
-                                                         this.options.distance]).lat;
+                           this._map.layerPointToLatLng([this._map.options.almostDistance,
+                                                         this._map.options.almostDistance]).lat;
         }
         this._map.on('viewreset zoomend', computeBuffer, this);
         this._map.whenReady(computeBuffer, this);
@@ -87,7 +96,7 @@ L.Handler.AlmostOver = L.Handler.extend({
 
     getClosest: function (latlng) {
         var snapfunc = L.GeometryUtil.closestLayerSnap,
-            distance = this.options.distance;
+            distance = this._map.options.almostDistance;
 
         var snaplist = [];
         if (typeof this.searchBuffer == 'function') {

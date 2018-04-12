@@ -35,7 +35,7 @@ describe('L.Handler.AlmostOver', function() {
 
         beforeEach(function() {
             map = L.map('map').fitWorld();
-            period = map.almostOver.options.samplingPeriod;
+            period = map.options.almostSamplingPeriod;
         });
 
         afterEach(function() {
@@ -196,5 +196,56 @@ describe('L.Handler.AlmostOver', function() {
             assert.equal(overlayer, otherline);
             done();
         });
+    });
+
+    describe('mousemove events can be disabled', function() {
+        var map;
+
+        beforeEach(function() {
+            map = L.map('map', {
+              almostOnMouseMove: false,
+            }).fitWorld();
+            var line = L.polyline([[0, 0], [0, 10]]).addTo(map);
+            map.almostOver.addLayer(line);
+        });
+
+        afterEach(function() {
+            map.remove();
+        });
+
+        it("should not trigger almost:over, even if close enough", function(done) {
+            var callback = sinon.spy();
+            map.on('almost:over', callback);
+            map.fire('mousemovesample', {latlng: [33, 0]});
+            assert.isFalse(callback.called);
+            done();
+        });
+
+        it("should not trigger almost:over, almost:move, even if close enough ", function(done) {
+            var over = sinon.spy(),
+                move = sinon.spy(),
+                out = sinon.spy();
+            map.on('almost:over', over);
+            map.on('almost:move', move);
+            map.on('almost:out', out);
+            map.fire('mousemovesample', {latlng: [10, 0]});
+            assert.isFalse(over.called);
+            assert.isFalse(move.called);
+            assert.isFalse(out.called);
+            done();
+        });
+
+        it("should trigger almost clicks if close enough", function(done) {
+            var click = sinon.spy(),
+                dblclick = sinon.spy();
+            map.on('almost:click', click);
+            map.on('almost:dblclick', dblclick);
+            map.fire('click', {latlng: [10, 0]});
+            map.fire('dblclick', {latlng: [10, 0], containerPoint: [0, 0], originalEvent: { shiftKey: false } });
+            assert.isTrue(click.called);
+            assert.isTrue(dblclick.called);
+            done();
+        });
+
     });
 });
