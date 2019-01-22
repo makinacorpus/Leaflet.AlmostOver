@@ -89,7 +89,9 @@ L.Handler.AlmostOver = L.Handler.extend({
                 this.unindexLayer(layer);
             }
             var index = this._layers.indexOf(layer);
-            this._layers.splice(index, 1);
+            if (0 <= index) {
+                this._layers.splice(index, 1);
+            }
         }
         this._previous = null;
     },
