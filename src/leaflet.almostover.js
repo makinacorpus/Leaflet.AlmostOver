@@ -17,7 +17,7 @@ L.Map.mergeOptions({
 
 L.Handler.AlmostOver = L.Handler.extend({
 
-    includes: L.Mixin.Events,
+    includes: L.Evented || L.Mixin.Events,
 
     initialize: function (map) {
         this._map = map;
