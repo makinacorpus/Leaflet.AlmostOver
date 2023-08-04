@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Leaflet.AlmostOver</title>
+
+  <script type='text/javascript' src="https://unpkg.com/leaflet@0.7.7/dist/leaflet.js"></script>
+  <script type='text/javascript' src="https://cdn.rawgit.com/makinacorpus/Leaflet.GeometryUtil/master/src/leaflet.geometryutil.js"></script>
+
+  <script type='text/javascript' src="../src/leaflet.almostover.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet@0.7.7/dist/leaflet.css">
+  <style type='text/css'>
+    #map {
+        position: absolute;
+        top:0;
+        left: 0;
+        right: 0;
+        bottom:0;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script type='text/javascript'>
+    window.onload = function () {
+
+      var map = L.map('map').setView([48.49, 1.395], 16);
+
+      L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(map);
+
+      var lines = L.geoJson({type:"FeatureCollection",features:[{type:"Feature",properties:{},geometry:{type:"LineString",coordinates:[[1.3988685607910156,48.494596878004174],[1.3979887962341309,48.49458265820301],[1.3975811004638672,48.49409918258983],[1.397409439086914,48.49331707992515],[1.3971948623657227,48.49280515164832],[1.3970017433166504,48.49222211592656],[1.3965296745300293,48.49166751475012],[1.396315097808838,48.49134043941787],[1.396036148071289,48.49060095697656],[1.3963580131530762,48.48983302148858],[1.3957571983337402,48.489705031109914],[1.3952207565307617,48.48947749186131],[1.3948774337768552,48.4892499515917],[1.3946199417114258,48.488993967567986],[1.394383907318115,48.48853888166857],[1.3941478729248045,48.48804112678984],[1.3940191268920896,48.48777091495253],[1.3939118385314941,48.48741537086776],[1.3943195343017578,48.48616383585965],[1.3945555686950684,48.485708724562784],[1.3942551612854002,48.48539583317714]]}},{type:"Feature",properties:{},geometry:{type:"LineString",coordinates:[[1.3963472843170166,48.48983302148858],[1.3966315984725952,48.489783247490834],[1.3977956771850584,48.48944904938345],[1.398932933807373,48.489392164379844],[1.3996410369873047,48.4893495005853],[1.400349140167236,48.489235730290964],[1.4006924629211426,48.489548597986165],[1.4010357856750488,48.49000367482429],[1.4014005661010742,48.490202769656726],[1.4019370079040525,48.49017432758567],[1.4039969444274902,48.489705031109914]]}}]}).addTo(map);
+
+      map.almostOver.addLayer(lines);
+
+
+      var circle = L.circleMarker([0, 0], {radius: 5, fillColor: 'white', fillOpacity: 1});
+
+      map.on('almost:over', function (e) {
+        map.addLayer(circle);
+        e.layer.setStyle({color: 'red'});
+      });
+
+      map.on('almost:move', function (e) {
+        circle.setLatLng(e.latlng);
+      });
+
+      map.on('almost:out', function (e) {
+        map.removeLayer(circle);
+        e.layer.setStyle({weight: 5, color: '#03f'});
+      });
+
+      map.on('almost:click', function (e) {
+        e.layer.setStyle({weight: 10});
+      });
+    };
+  </script>
+</body>
+</html>
